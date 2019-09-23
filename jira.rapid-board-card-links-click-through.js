@@ -24,11 +24,14 @@
           return findAncestor(el.parentNode, constructor); // recurse
         }
       },
+      modifiersPressed = function modifiersPressed(e) {
+        return e.shiftKey || e.altKey || e.ctrlKey || e.metaKey;
+      },
       clickOverrideHandler = function clickOverrideHandler(e) {
         if (e.type === 'click') {
           var anchorEl = findAncestor(e.target, HTMLAnchorElement);
 
-          if (anchorEl === null) {
+          if (anchorEl === null || modifiersPressed(e)) {
             return true;
           } else if (anchorEl.parentNode.className.includes('ghx-key')) {
             window.location.href = anchorEl.href;
