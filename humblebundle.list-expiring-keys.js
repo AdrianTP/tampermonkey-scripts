@@ -2,10 +2,16 @@
 // @name         List Expiring Humble Bundle Keys
 // @namespace    https://github.com/AdrianTP
 // @version      0.1
-// @description  Adds a "Expiring Keys" button to https://www.humblebundle.com/home/keys
+// @description  Adds an "Expiring Keys" button to https://www.humblebundle.com/home/keys
+// @encoding     utf-8
+// @license      https://creativecommons.org/licenses/by-sa/4.0/
 // @author       https://github.com/AdrianTP
+// @icon         https://avatars3.githubusercontent.com/u/1585276?s=200&v=3
+// @homepage     https://github.com/AdrianTP/userscripts/
 // @match        *://*.humblebundle.com/home/keys
 // @grant        none
+// @updateURL    https://raw.githubusercontent.com/AdrianTP/userscripts/master/humblebundle.list-expiring-keys.js
+// @downloadURL  https://raw.githubusercontent.com/AdrianTP/userscripts/master/humblebundle.list-expiring-keys.js
 // ==/UserScript==
 
 // TODO: implement grouping feature and links to take user to bundle page containing expiring keys; link format: https://www.humblebundle.com/downloads?key=<bundle_key>

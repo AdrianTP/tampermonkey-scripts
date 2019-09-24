@@ -3,9 +3,15 @@
 // @namespace    https://github.com/AdrianTP
 // @version      0.1
 // @description  Adds a "Download All" button to beatport.com/downloads/available
+// @encoding     utf-8
+// @license      https://creativecommons.org/licenses/by-sa/4.0/
 // @author       https://github.com/AdrianTP
+// @icon         https://avatars3.githubusercontent.com/u/1585276?s=200&v=3
+// @homepage     https://github.com/AdrianTP/userscripts/
 // @match        *://*.beatport.com/downloads/available*
 // @grant        none
+// @updateURL    https://raw.githubusercontent.com/AdrianTP/userscripts/master/beatport.download-all.js
+// @downloadURL  https://raw.githubusercontent.com/AdrianTP/userscripts/master/beatport.download-all.js
 // ==/UserScript==
 
 // 1. Scan HTML, find element:
@@ -27,10 +33,10 @@
       DOWNLOAD_MODE = 1,
       AUTO_COOKIE_NAME = 'beatport.download-all_auto',
       TEST_COOKIE_NAME = 'beatport.download-all_test',
+      BASE_URL = 'https://www.beatport.com/api/downloads/purchase?downloadId=',
       downloading = false,
       msMinWait = 1000,
       msMaxWait = 10000,
-      baseURL = 'https://www.beatport.com/api/downloads/purchase?downloadId=',
       loc = window.location,
       href_300 = loc.origin + loc.pathname + '?per-page=300',
       liTracks = document.querySelectorAll('.available-downloads-tracks .track'),
@@ -236,7 +242,7 @@
             waitRand(msMinWait, msMaxWait);
           });
 
-          xhr.open('GET', baseURL + track.downloadId, false);
+          xhr.open('GET', BASE_URL + track.downloadId, false);
           xhr.send();
 
           console.log('downloading track from:', track.downloadLink);
