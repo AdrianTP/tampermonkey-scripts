@@ -18,14 +18,11 @@
   'use strict';
 
   var clickOverrideHandler = function clickOverrideHandler(e) {
-        if(e.target.closest('a.ghx-key-link')) {
-          e.stopPropagation();
-          return true;
-        }
-      },
-      init = function init() {
-        document.addEventListener('click', clickOverrideHandler, true);
-      };
+    if(e.target.closest('a.ghx-key-link')) {
+      e.stopPropagation();
+      return true;
+    }
+  };
 
-  init();
+  document.addEventListener('click', clickOverrideHandler, true);
 })();
