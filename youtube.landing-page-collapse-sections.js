@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Landing Page Collapsible Sections
 // @namespace    https://github.com/AdrianTP
-// @version      0.1
+// @version      0.2
 // @description  Click landing page section titles to collapse/expand that section. Alt-click to collapse/expand all of them at once.
 // @encoding     utf-8
 // @license      https://creativecommons.org/licenses/by-sa/4.0/
