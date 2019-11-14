@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Slack Web App Print Entire Chat
 // @namespace    https://github.com/AdrianTP
-// @version      0.3
+// @version      0.4
 // @description  Collect all hot-loaded-and-swapped messages in a chat in chronological order for export
 // @encoding     utf-8
 // @license      https://creativecommons.org/licenses/by-sa/4.0/
@@ -89,7 +89,7 @@
       width: 0;
       overflow: hidden;
     }`,
-    observer = new MutationObserver((mutations, observer) => {
+    messageScraper = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         var i;
 
@@ -169,11 +169,11 @@
     },
     record = function record() {
       collectNodes(0, slackMessagesContainer.childNodes);
-      observer.observe(slackMessagesContainer, { childList: true });
+      messageScraper.observe(slackMessagesContainer, { childList: true });
       displayMessage(MESSAGES.record);
     },
     stop = function stop() {
-      observer.disconnect();
+      messageScraper.disconnect();
     },
     displayMessage = function displayMessage(message) {
       alert(message); // TODO: gross. please use something other than `alert`
@@ -264,11 +264,25 @@
       window.addEventListener('beforeprint', prePrint);
       window.addEventListener('afterprint', postPrint);
     },
+    waitForElements = function waitForElements(selectors, cb) {
+      var domEls = selectors.map(i => document.querySelector(i)).filter(i => i !== null);
+
+      console.log(domEls.length, selectors.length);
+
+      if (domEls.length !== selectors.length) {
+        window.requestAnimationFrame(()=>{ waitForElements(selectors, cb); });
+      } else {
+        cb();
+      }
+    },
     init = function init() {
-      addStylesheet();
-      findContainers();
-      placeButtons();
-      addPrintEventListeners();
+      // TODO: figure out how to use MutationObserver for this, too
+      waitForElements([SLACK_BUTTONS_CONTAINER_SELECTOR, SLACK_MESSAGES_CONTAINER_SELECTOR], () => {
+        addStylesheet();
+        findContainers();
+        placeButtons();
+        addPrintEventListeners();
+      });
     };
 
   init();
