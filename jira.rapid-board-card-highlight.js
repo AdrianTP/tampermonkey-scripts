@@ -132,7 +132,7 @@
         overlay.id = UNIQUE_OVERLAY_ID;
 
 //        GM_addStyle(style); // TODO: figure out why the fuck this doesn't work
-        styleTag.innerText = style;
+        styleTag.innerHTML = style;
         document.head.appendChild(styleTag);
 
         button.innerText = BUTTON_TEXT_DISABLED;

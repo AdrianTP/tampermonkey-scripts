@@ -129,11 +129,11 @@
     },
     init = function init() {
 //      GM_addStyle(style); // TODO: figure out why the fuck this doesn't work
-      styleTag.innerText = style;
+      styleTag.innerHTML = style;
       document.head.appendChild(styleTag);
 
       waitForElements([`${BUTTON_BAR_SELECTOR} ytd-topbar-menu-button-renderer`, BROWSE_PARENT_SELECTOR, SECTION_PARENT_SELECTOR], () => {
-        // TODO: consider using MusationObserver instead: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+        // TODO: consider using MutationObserver instead: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 
         buttonParent = document.querySelector(BUTTON_BAR_SELECTOR);
         browseParent = document.querySelector(BROWSE_PARENT_SELECTOR);

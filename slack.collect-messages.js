@@ -257,7 +257,7 @@
     },
     addStylesheet = function addStylesheet() {
       styleTag = document.createElement('style');
-      styleTag.innerText = style;
+      styleTag.innerHTML = style;
       document.head.appendChild(styleTag);
     },
     addPrintEventListeners = function addPrintEventListeners() {
