@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         (Simplified) Higher Contrast in Jira Rapid Board for Standup
 // @namespace    https://github.com/AdrianTP
-// @version      0.1
+// @version      0.2
 // @description  Highlights the hovered card in JIRA's Rapid Board view to make standups a little bit easier.
 // @encoding     utf-8
 // @license      https://creativecommons.org/licenses/by-sa/4.0/
@@ -40,6 +40,7 @@
           border-radius: 1px;
           opacity: 0;
           transition: opacity 1s ease-in-out;
+          pointer-events: none;
         }
 
         .${UNIQUE_ACTIVE_CLASS} ${JIRA_CARD_SELECTOR}:hover::before {
