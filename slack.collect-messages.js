@@ -120,6 +120,7 @@
         if (ids.includes(el.id)) { return; }
 
         el.removeAttribute('style');
+        el.classList.remove(SLACK_STICKY_CLASS);
 
         els.splice(startIndex, 0, el);
         ids.push(el.id);
