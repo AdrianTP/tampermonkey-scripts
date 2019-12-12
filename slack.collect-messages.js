@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Slack Web App Print Entire Chat
 // @namespace    https://github.com/AdrianTP
-// @version      0.4
+// @version      0.4.1
 // @description  Collect all hot-loaded-and-swapped messages in a chat in chronological order for export
 // @encoding     utf-8
 // @license      https://creativecommons.org/licenses/by-sa/4.0/
@@ -54,6 +54,8 @@
       ]
     },
     SLACK_ITEM_CLASS = 'c-virtual_list__item',
+    SLACK_DIVIDER_CLASS = 'c-virtual_list__sticky_container',
+    SLACK_STICKY_CLASS = 'c-virtual_list__item--sticky',
     SLACK_BUTTONS_CONTAINER_SELECTOR = '[data-qa="channel_header__buttons"]',
     SLACK_MESSAGES_CONTAINER_SELECTOR = '[data-qa="slack_kit_list"]',
     slackButtonsContainer,
@@ -257,7 +259,7 @@
     },
     addStylesheet = function addStylesheet() {
       styleTag = document.createElement('style');
-      styleTag.innerHTML = style;
+      styleTag.innerText = style;
       document.head.appendChild(styleTag);
     },
     addPrintEventListeners = function addPrintEventListeners() {
