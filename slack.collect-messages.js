@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Slack Web App Print Entire Chat
 // @namespace    https://github.com/AdrianTP
-// @version      0.4.1
+// @version      0.5
 // @description  Collect all hot-loaded-and-swapped messages in a chat in chronological order for export
 // @encoding     utf-8
 // @license      https://creativecommons.org/licenses/by-sa/4.0/
@@ -56,8 +56,8 @@
     SLACK_ITEM_CLASS = 'c-virtual_list__item',
     SLACK_DIVIDER_CLASS = 'c-virtual_list__sticky_container',
     SLACK_STICKY_CLASS = 'c-virtual_list__item--sticky',
-    SLACK_BUTTONS_CONTAINER_SELECTOR = '[data-qa="channel_header__buttons"]',
-    SLACK_MESSAGES_CONTAINER_SELECTOR = '[data-qa="slack_kit_list"]',
+    SLACK_BUTTONS_CONTAINER_SELECTOR = '[role="main"] [class$="view_header"]',
+    SLACK_MESSAGES_CONTAINER_SELECTOR = '[role="main"] .c-virtual_list__scroll_container',
     slackButtonsContainer,
     slackMessagesContainer,
     outputContainer,
@@ -108,6 +108,10 @@
         collectNodes(i, mutation.addedNodes);
       });
     }),
+    removeClassesByRegex = function removeClassesByRegex(el, re) {
+      var matchingClasses = Array.from(el.classList).filter(v => re.test(v));
+      el.classList.remove(...matchingClasses);
+    },
     collectNodes = function collectNodes(startIndex, nodes) {
       nodes.forEach(node => {
         var el;
@@ -171,6 +175,7 @@
       prePrintDone = false;
     },
     record = function record() {
+      // TODO: Slack changed how they load images, now using a blurred placeholder and lazy-loading the actual image later, resulting in mostly blurred placeholders in the final collection.
       collectNodes(0, slackMessagesContainer.childNodes);
       messageScraper.observe(slackMessagesContainer, { childList: true });
       displayMessage(MESSAGES.record);
@@ -181,7 +186,7 @@
     displayMessage = function displayMessage(message) {
       alert(message); // TODO: gross. please use something other than `alert`
     },
-    printButtonHandler = function printHandler() {
+    printButtonHandler = function printHandler(e) {
       if (els.length === 0) {
         displayMessage(MESSAGES.print);
         e.stopPropagation();
@@ -225,7 +230,8 @@
       updateButtons();
     },
     placeButtons = function placeButtons() {
-      var cloneCandidate = slackButtonsContainer.childNodes[0];
+      // TODO: cloneCandidate doesn't exist in groups; it only exists in direct messages and group messages.
+      var cloneCandidate = slackButtonsContainer.querySelector(':scope > .p-classic_nav__model__button');
 
       printButton = cloneCandidate.cloneNode(true);
       recordButton = cloneCandidate.cloneNode(true);
@@ -239,17 +245,17 @@
       printButton.removeAttribute('data-qa');
       recordButton.removeAttribute('data-qa');
 
-      printIcon.classList.remove(printIcon.classList[printIcon.classList.length - 1]);
+      removeClassesByRegex(printIcon, /^c-icon--/);
       printIcon.classList.add(ICON_CLASSES.print);
 
       printButton.setAttribute('aria-label', ARIA_LABELS.printButton);
 
-      recordIcon.classList.remove(recordIcon.classList[recordIcon.classList.length - 1]);
+      removeClassesByRegex(recordIcon, /^c-icon--/);
 
       updateButtons();
 
-      slackButtonsContainer.insertAdjacentElement('afterbegin', printButton);
-      slackButtonsContainer.insertAdjacentElement('afterbegin', recordButton);
+      cloneCandidate.insertAdjacentElement('beforebegin', printButton);
+      cloneCandidate.insertAdjacentElement('beforebegin', recordButton);
 
       printButton.addEventListener('click', printButtonHandler);
       recordButton.addEventListener('click', recordButtonHandler);
@@ -270,11 +276,12 @@
     waitForElements = function waitForElements(selectors, cb) {
       var domEls = selectors.map(i => document.querySelector(i)).filter(i => i !== null);
 
-      console.log(domEls.length, selectors.length);
+      console.log(`waiting for elements: ${selectors}`, domEls.length, selectors.length);
 
       if (domEls.length !== selectors.length) {
         window.requestAnimationFrame(()=>{ waitForElements(selectors, cb); });
       } else {
+        console.log(`done waiting for elements: ${selectors}`);
         cb();
       }
     },
